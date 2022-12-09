@@ -128,7 +128,114 @@ public class ElfCalorieCounter {
     }
 
     private static void day3() {
-        
+        String path = "res/rucksacksorting.txt";
+        File file = new File(path);
+
+        Scanner scr;
+
+        try {
+            scr = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        int sum = 0;
+
+        while(scr.hasNextLine()) {
+            String firstLn = scr.nextLine();
+            String secondLn = scr.nextLine();
+            String thirdLn = scr.nextLine();
+            char sameType = 0;
+
+                for (int i = 0; i < firstLn.length(); i++) {
+                    for (int j = 0; j < secondLn.length(); j++) {
+                        for (int k = 0; k < thirdLn.length(); k++) {
+                            if (firstLn.charAt(i) == secondLn.charAt(j) && secondLn.charAt(j) == thirdLn.charAt(k)) {
+                                sameType = firstLn.charAt(i);
+                            }
+                        }
+                    }
+                }
+
+
+            sum += determinePriority(sameType);
+        }
+        System.out.println(sum);
+    }
+    private static int determinePriority(char ch) {
+        LinkedList letters = new LinkedList<Character>();
+        System.out.println(ch);
+        String salphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (int i = 0; i < 52; i++) {
+            letters.add(salphabet.charAt(i));
+        }
+        return letters.indexOf(ch)+1;
+    }
+
+    private static void day4() {
+        String path = "res/campcleanup.txt";
+        File file = new File(path);
+
+        Scanner scr;
+
+        try {
+            scr = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        int count = 0;
+        while(scr.hasNextLine()) {
+            String ln = scr.nextLine();
+            int[] elf1 = new int[2];
+            int[] elf2 = new int[2];
+
+
+            for (int i = 0; i < ln.length(); i++) {
+                if(ln.charAt(i) == '-' || ln.charAt(i) == ',') {
+                    continue;
+                }
+                if(ln.charAt(i) <= '9' && ln.charAt(i) >= '0') {
+                    if(i != ln.length()-1 && (ln.charAt(i+1) <= '9' && ln.charAt(i+1) >= '0')) {
+                        int i1 = Character.getNumericValue(ln.charAt(i)) * 10 + Character.getNumericValue(ln.charAt(i+1));
+                        if(elf1[0] == 0) {
+                            elf1[0] = i1;
+                        } else if(elf1[1] == 0) {
+                            elf1[1] = i1;
+                        } else if(elf2[0] == 0) {
+                            elf2[0] = i1;
+                        } else if(elf2[1] == 0) {
+                            elf2[1] = i1;
+                        }
+
+                    } else if(i!=0 && ln.charAt(i-1) <= '9' && ln.charAt(i-1) >= '0') {
+
+                    } else {
+                        if(elf1[0] == 0) {
+                            elf1[0] = Character.getNumericValue(ln.charAt(i));
+                        } else if(elf1[1] == 0) {
+                            elf1[1] = Character.getNumericValue(ln.charAt(i));
+                        } else if(elf2[0] == 0) {
+                            elf2[0] = Character.getNumericValue(ln.charAt(i));
+                        } else if(elf2[1] == 0) {
+                            elf2[1] = Character.getNumericValue(ln.charAt(i));
+                        }
+                    }
+
+                }
+            }
+
+            System.out.println(elf1[0] + " " + elf1[1]);
+            System.out.println(elf2[0] + " " + elf2[1]);
+            if(isContained(elf1, elf2)) {
+                System.out.println("got one");
+                count++;
+            }
+        }
+        System.out.println(count);
+    }
+    private static boolean isContained(int[] a, int[] b) {
+        return ((a[0] <= b[1] && a[1] >= b[0]));
     }
 
     public static void day5() {
@@ -211,7 +318,7 @@ public class ElfCalorieCounter {
 
 
         public static void main (String[]args){
-            day2();
+            day4();
 
         }
 }
