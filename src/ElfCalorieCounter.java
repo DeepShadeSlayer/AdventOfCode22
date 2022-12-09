@@ -91,10 +91,44 @@ public class ElfCalorieCounter {
             String line = scr.nextLine();
             char opp = line.charAt(0);
             char me = line.charAt(2);
-            if(opp == "A" && me == "X" || opp == "B" && me == "Y" || opp == "C" && me == "Z") {
-
-            }
+            score += determinePoints(opp, me);
         }
+        System.out.println(score);
+    }
+    private static int determinePoints(char opp, char me) {
+        switch(opp) {
+            case 'A':
+                if(me == 'X') {
+                    return 0+3;
+                } if(me == 'Y') {
+                    return 3+1;
+                } if(me == 'Z') {
+                    return 6+2;
+                }
+            case 'B':
+                if(me == 'X') {
+                    return 0+1;
+                } if(me == 'Y') {
+                    return 3+2;
+                } if(me == 'Z') {
+                    return 6+3;
+                }
+            case 'C':
+                if(me == 'X') {
+                    return 0+2;
+                } if(me == 'Y') {
+                    return 3+3;
+                } if(me == 'Z') {
+                    return 6+1;
+                }
+            default:
+                System.out.println("there is a problem");
+                return -1;
+        }
+    }
+
+    private static void day3() {
+        
     }
 
     public static void day5() {
