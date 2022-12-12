@@ -1,8 +1,9 @@
+import org.w3c.dom.Node;
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -315,10 +316,46 @@ public class ElfCalorieCounter {
 
     }
 
+    private static void day7() {
+        String path = "res/day7.txt";
+        File file = new File(path);
+
+        Scanner scr;
+
+        try {
+            scr = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    private class Node {
+        private int file;
+        private Node parent;
+        ArrayList<Node> children = new ArrayList<>();
+
+        Node(int file) {
+            this.file = file;
+        }
+
+        Node(int file, Node parent) {
+            this.file = file;
+            this.parent = parent;
+        }
+
+        private int getTotal() {
+            int sum = 0;
+            for (int i = 0; i < children.size(); i++) {
+                sum += children.get(i).getTotal();
+            }
+            return sum;
+        }
+    }
 
 
         public static void main (String[]args){
-            day4();
+            day7();
 
         }
 }
