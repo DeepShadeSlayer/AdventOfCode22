@@ -316,46 +316,106 @@ public class ElfCalorieCounter {
 
     }
 
-    private static void day7() {
+    private static void day7() throws FileNotFoundException{
         String path = "res/day7.txt";
         File file = new File(path);
 
         Scanner scr;
+        scr = new Scanner(file);
 
-        try {
-            scr = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+
+        Node firstDir = new Node(scr.nextLine().substring(5));
+
+        Node currentNode = firstDir;
+
+        while(scr.hasNextLine()) {
+            String line = scr.nextLine();
+
+            if(line.charAt(0) == '$') {
+                System.out.print("do an action: ");
+                if(line.charAt(2) == 'c') {
+
+                    if(line.charAt(5) == '.') {
+                        System.out.println("going to parent");
+                        currentNode = currentNode.parent;
+                        continue;
+                    }
+                    System.out.println("going to new dir");
+                    for (int i = 0; i < currentNode.children.size(); i++) {
+
+                        if(currentNode.children.get(i).name != null && currentNode.children.get(i).name == line.substring(5)) {
+                            currentNode = currentNode.children.get(i);
+                        }
+                    }
+                } else if(line.charAt(2) == 'l') {
+                    System.out.println("listing current dir");
+                    continue;
+                }
+            }
+            if(line.charAt(0) == 'd') {
+                System.out.println("found a new dir");
+                currentNode.children.add(new Node(currentNode, line.substring(4)));
+            }
+            if(line.charAt(0) <= '9' && line.charAt(0) >= '0') {
+                System.out.println("found a file size");
+                String size = null;
+                int iSize = 0;
+
+                for (int i = 0; i < line.length(); i++) {
+                    if(line.charAt(i) == ' ') {
+                        size = line.substring(0, i);
+                    }
+                }
+
+                int a = 1;
+                for (int i = size.length()-1; i >= 0; i--) {
+                    iSize += line.charAt(i) * a;
+                    a++;
+                }
+
+                currentNode.children.add(new Node(iSize, currentNode));
+            }
         }
-
-
+        System.out.println(firstDir.getTotal());
     }
-    private class Node {
+
+    private static class Node {
         private int file;
+        private String name;
         private Node parent;
         ArrayList<Node> children = new ArrayList<>();
 
-        Node(int file) {
-            this.file = file;
+        Node(String name) {
+            this.name = name;
         }
 
         Node(int file, Node parent) {
             this.file = file;
+        }
+
+        Node(Node parent, String name) {
             this.parent = parent;
         }
 
         private int getTotal() {
             int sum = 0;
-            for (int i = 0; i < children.size(); i++) {
-                sum += children.get(i).getTotal();
+            if(children.size() == 0) {
+                for (int i = 0; i < children.size(); i++) {
+                    sum += children.get(i).getTotal();
+                }
+                return sum;
             }
-            return sum;
+            return file;
         }
     }
 
 
         public static void main (String[]args){
-            day7();
+            try {
+                day7();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
         }
 }
