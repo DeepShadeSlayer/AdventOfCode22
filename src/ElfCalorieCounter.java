@@ -316,8 +316,8 @@ public class ElfCalorieCounter {
 
     }
 
-    private int deletableFileSize;
-    private static void day7() {
+    private static int deletableFileSize;
+    private static void day7() throws FileNotFoundException {
         String path = "res/day7.txt";
         File file = new File(path);
 
@@ -379,7 +379,6 @@ public class ElfCalorieCounter {
         }
         System.out.println(firstDir.getTotal());
     }
-
     private static class Node {
         private int file;
         private String name;
@@ -413,10 +412,97 @@ public class ElfCalorieCounter {
         }
     }
 
+    private static void day9() throws FileNotFoundException{
+        String path = "res/ropepath.txt";
+        File file = new File(path);
+
+        Scanner scr;
+        scr = new Scanner(file);
+
+        Knot head = new Knot(4,0);
+        Knot tail = new Knot(4,0);
+
+        ArrayList<Knot> visited = new ArrayList<>();
+        System.out.println("this is the first time");
+        visited.add(new Knot(tail.row, tail.col));
+        System.out.println(visited.size());
+
+        while(scr.hasNextLine()) {
+            String line = scr.nextLine();
+            int move = Character.getNumericValue(line.charAt(2));
+            for (int i = 1; i <= move; i++) {
+                switch (line.charAt(0)) {
+                    case 'R':
+                        System.out.println("going right");
+                        head.col++;
+                        break;
+                    case 'L':
+                        System.out.println("going left");
+                        head.col--;
+                        break;
+                    case 'U':
+                        System.out.println("going up");
+                        head.row--;
+                        break;
+                    case 'D':
+                        System.out.println("going down");
+                        head.row++;
+                        break;
+                    default:
+                        System.out.println("problem reading direction");
+                }
+                if(head.col-tail.col > 1) {
+                    tail.col++;
+                } else if(tail.col-head.col > 1) {
+                    tail.col--;
+                }
+                if(head.row-tail.row > 1) {
+                    tail.row++;
+                } else if(tail.row-head.row > 1) {
+                    tail.row--;
+                }
+                Knot temp = new Knot(tail.row, tail.col);
+                System.out.println(temp.row + " " + temp.col);
+                boolean already = false;
+                if(visited.contains(temp)) {
+                    already = true;
+                }
+                /*for (int j = 0; j < visited.size(); j++) {
+                    System.out.println(visited.get(j).row + " " + visited.get(j).col);
+                    System.out.println(visited.size());
+
+                    if((temp.row == visited.get(j).row) && (temp.col == visited.get(j).col)) {
+                        System.out.println("visited this spot already");
+                        already = true;
+                        break;
+                    }
+                }*/
+                if (!already) {
+                    System.out.println("haven't visited this spot");
+                    visited.add(new Knot(temp.row, temp.col));
+                }
+            }
+
+        }
+        System.out.println(visited.size());
+    }
+    private static class Knot {
+        int row, col;
+
+        Knot(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return row == ((Knot)obj).row && col == ((Knot)obj).col;
+        }
+    }
 
         public static void main (String[]args){
             try {
-                day7();
+                day9();
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
