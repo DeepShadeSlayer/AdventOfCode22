@@ -316,7 +316,8 @@ public class ElfCalorieCounter {
 
     }
 
-    private static void day7() throws FileNotFoundException{
+    private int deletableFileSize;
+    private static void day7() {
         String path = "res/day7.txt";
         File file = new File(path);
 
@@ -405,7 +406,10 @@ public class ElfCalorieCounter {
                 }
                 return sum;
             }
-            return file;
+            if(sum < 100000) {
+                deletableFileSize += sum;
+            }
+            return sum;
         }
     }
 
